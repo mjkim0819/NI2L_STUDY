@@ -9,10 +9,10 @@ ___
 
 감정 분류를 위한 대화 음성 데이터셋  
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/42f52d40-b967-4bc8-9260-bf4ef82bee12)  
-한국어로 된 대화를 감정에 따라 분류해 둠. 
+한국어로 된 대화를 감정에 따라 분류해 둠.  
 happiness, angry, disgust, fear, neutral, sadness, surprise 총 7개의 감정  
-총 5명을 기준으로 라벨링이 되어있음. 
-약 19,374개의 data  
+총 5명을 기준으로 라벨링이 되어있음.  
+약 19,374개의 data   
 https://aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&dataSetSn=263&aihubDataSe=extrldata  
   
   
