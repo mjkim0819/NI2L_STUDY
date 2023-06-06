@@ -1,5 +1,5 @@
 # Word2Vec
-결과값이 출력층으로만 향하지 않고, 출력층과 동시에 다시 은닉층의 다음 계산 입력으로 들어감
+단어 벡터 간 유의미한 유사도를 반영할 수 있도록 단어의 의미를 수치화 할 수 있는 방법  
 
 ## Word Embedding
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/237035bf-6018-4bf5-8c83-b5d982ea1034)  
@@ -52,8 +52,28 @@ ex)  ‘강아지’라는 단어는 ‘귀엽다’, ‘예쁘다’, ‘애교
 #### 학습 방법
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/8c6bf32d-fcaf-4291-878e-c256e90117a5)  
 윈도우가 2개일 때 학습이 진행되는 방식을 표현하는 그림  
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/4c4a8ae8-0fa8-43ed-b409-221a71047c04)  
-
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/775d83fe-a6de-48e6-be05-1960f72d3e10)   
+- Input layer : 주변 단어들의 원 핫 인코딩  
+- Ouput layer : 중심 단어의 원 핫 인코딩   
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/8f4aa242-8de1-4cbd-9cd5-3f8bd07792c5)  
+- 은닉층이 하나인 얕은 신경망  
+- 은닉층에 활성화 함수가 없으며, 연산을 담당하는 층 (투사층이라고도 불림)  
+- 투사층의 크기 = 5 -> CBoW를 수행하고 얻는 단어의 임베팅 차원 = 5
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/cd10f627-272b-437a-bbf0-6134931005ba)   
+- 가중치 W = V*M
+- 입력 벡터와 가중치 W 행렬의 곱은 사실 W행렬의 i번째 행을 그대로 읽어오는 것
+- lookup table이라고 불림
+- W와 W'는 다름 (W = 5 * 7, W' = 7 * 5)
+- CBOW의 목적은 W와 W'를 잘 훈련시키는 것  
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/02bc9f8e-4ed8-435c-b6e0-e9a10d2a9dd7)  
+- 주변 단어에 가중치 W가 곱해진 결과는 은닉층에서 평균으로 구해짐
+- CBow와 Skip-Gram의 차이
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/9db69833-91bc-49c9-9ca9-fe803a06aaaf)  
+- 구해진 평균은 은닉층을 거쳐 W'와 곱해짐  
+- 다시 입력층과 같은 크기의 차원으로 변화  
+- softmax를 통해 총합이 1이 나오도록 수정
+- 손실함수로 cross-entropy 사용
+- 원 핫 벡터로 다시 변
   
   
   
