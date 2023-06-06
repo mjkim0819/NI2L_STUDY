@@ -13,7 +13,7 @@
   
 ## 목적
 
-## 윔도우 기반 동시 발 행렬 (Window based Co-occurrence Matrix)
+## 윈도우 기반 동시 발 행렬 (Window based Co-occurrence Matrix)
 
 ## 동시 등장 확 (Co-occurrence Probability)
 ### 1) k = soild 일 때
