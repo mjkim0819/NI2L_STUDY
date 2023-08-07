@@ -1,6 +1,4 @@
-# GAN (2014)
-**Generative Adversarial Nets**  
-Review. KMJ, 2023.08.04
+# Generative Adversarial Nets(2014)  
 
 ## Abstract
 * adversarial process(적대적 프로세스)를 바탕으로 한 새로운 생성모델 프레임 워크
