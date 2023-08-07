@@ -1,4 +1,5 @@
 # Generative Adversarial Nets(2014)  
+https://proceedings.neurips.cc/paper_files/paper/2014/file/5ca3e9b122f61f8f06494c97b1afccf3-Paper.pdf
 
 ## Abstract
 * adversarial process(적대적 프로세스)를 바탕으로 한 새로운 생성모델 프레임 워크
