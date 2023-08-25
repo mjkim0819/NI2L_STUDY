@@ -24,21 +24,15 @@
 
 
 ## Approach and Model Architecture
-CNN과 GAN의 조합이 DCGAN에서 처음 등장한 것은 아니지만, 처음으로 크게 성공한 모델이라 주목을 받음.  
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/10bf0242-29d8-4284-9c89-038259e52543)  
 
 ### Max pooling to strided Convolution
 * 공간적 해상도 감소 문제를 해결하기 위해 pooling이 아닌 transpose(합성곱 전치) 방식으로 진행
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/e4950d33-cf6d-4cd5-b242-446a2dc9830e)  
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/24c77d17-77d0-4537-8cb0-8d15456c149d)  
+![.](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcc9YHv%2FbtqEdydGzb1%2FPTOGzXMKTYZyxQB5SsKZa0%2Fimg.gif)  
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbNEavB%2FbtqEcHPTz8d%2F0Vrz9E2V4jtk7YDO30Mxr0%2Fimg.gif)
 
-[![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/524a00da-05c8-427b-ab5e-b488f1f154a9)  ](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcc9YHv%2FbtqEdydGzb1%2FPTOGzXMKTYZyxQB5SsKZa0%2Fimg.gif)
 https://eehoeskrap.tistory.com/431
 
-
-2d convolution과 2d deconvolution
-![img1 daumcdn](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/78e503f2-a9ef-4de6-a433-e0b049318fb1)  
-![img1 daumcdn](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/da5f7e54-9069-4b5a-a93d-44d2e9730c52)
-  
 * max pooling
   * 공간적 해상도를 줄이고 계산량을 감소시키는 convolution의 기본적인 계산
   * 입력 이미지의 중요한 특징을 추출하고 작은 변화에 강하게 반응 -> 이미지 분류에 유리
@@ -59,9 +53,20 @@ https://eehoeskrap.tistory.com/431
 * DCGAN은 합성곱 레이어를 사용
 * fully connected layer
   * 데이터의 특징을 자세하게 추출하기 위해 모든 입력과 출력 간의 모든 뉴런이 서로 연결되어 있음
-  * 입력데이터가 크거나 출력 뉴런 수가 많으면 파라미터 값이 많이 필요
-  * 
+  * 입력데이터가 크거나 출력 뉴런 수가 많으면 파라미터 값이 많이 필요  
 * 합성곱 레이어
+  * 작은 윈도우를 슬라이딩하면서 지역적인 패턴을 감지
+  * 공간적 특성을 보존 -> 공간의 구조나 패턴을 고려 가능 (얼굴에서 눈, 코, 입의 위치)
+  * 물체의 경계에 대한 정보 보존 -> 객체 검출 성능 증가, 고해상도 이미지 생성 가능
 
 ### Use batch normalization
+* 훈련의 안정성을 높이기 위해 입력 데이터를 정규화하는 과정
+  * 훈련할 데이터를 미니 배치로 나눠 모든 입력 데이터에 대한 평균과 분산 계산
+  * 각 미니 배치의 평균이 0, 분산이 1이 되도록 입력데이터를 수정하여 정규화
+  * 데이터를 정규화 시키는 과정에서 추가된 파라미터를 역전파를 통해 학습
+* 수동으로 데이터 분포를 조절해야하는 기존 방식과는 달리 데이터의 특성에 맞게 자동으로 데이터의 분포를 조절
+* 더 높은 학습률을 설정할 수 있어, 학습을 빠르게 수렴시킬 수 있음
+* 네트워크의 구조나 크기가 변경되더라도 적용이 가능
+* **훈련 과정을 안정화하고 성능을 향상시키면서 동시에 단순화 및 자동화**
+
 
