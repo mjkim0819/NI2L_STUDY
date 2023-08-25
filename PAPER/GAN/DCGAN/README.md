@@ -25,23 +25,29 @@
 
 ## Approach and Model Architecture
 CNN과 GAN의 조합이 DCGAN에서 처음 등장한 것은 아니지만, 처음으로 크게 성공한 모델이라 주목을 받음.  
-### Max pooling to strided Convolution
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/bf3201a2-023c-4df7-af2b-e25bd3ddb113)  
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/0e780187-2891-4086-af5d-b205ba0c296f)  
-  
-* 데이터의 세부정보를 유지하고, 더 간결하고 안정적으로 학습하기 위해 pooling이 아닌 strided 방식으로 진행
-* max pooling
-  * 작은 영역을 스캔하면서 각 영역에서 가장 큰 숫자 선택
-  * 이미지를 줄이는 과정에서 중요하지 않은 정보는 제외하고 중요한 정보만 강조
-* strided Convolution
-  * convolution keneral을 이동시킬 때 한번에 여러 스텝을 건너뛰며 계산
-  * 이미지를 줄이는 과정에서 중요하지 않은 정보는 간추리고 (제외는 아님) 중요한 정보를 추출
 
-* strided convolution을 사용하는 이유
-  * 정보를 잃지 않으면서 파라미터 수 줄이기
-  * 이미지의 해상도 유지
-  * 얼굴 생성 모델에서 미소의 주름 같이 미세한 세부사항도 학습 가능
-  * 기울기 소실 문제를 줄이는데 효과적
+### Max pooling to strided Convolution
+* 공간적 해상도 감소 문제를 해결하기 위해 pooling이 아닌 transpose(합성곱 전치) 방식으로 진행
+[![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/524a00da-05c8-427b-ab5e-b488f1f154a9)  ](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcc9YHv%2FbtqEdydGzb1%2FPTOGzXMKTYZyxQB5SsKZa0%2Fimg.gif)
+
+2d convolution과 2d deconvolution
+![img1 daumcdn](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/78e503f2-a9ef-4de6-a433-e0b049318fb1)  
+![img1 daumcdn](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/da5f7e54-9069-4b5a-a93d-44d2e9730c52)
+  
+* max pooling
+  * 공간적 해상도를 줄이고 계산량을 감소시키는 convolution의 기본적인 계산
+  * 입력 이미지의 중요한 특징을 추출하고 작은 변화에 강하게 반응 -> 이미지 분류에 유리
+  * 작은 영역을 스캔하면서 각 영역에서 가장 큰 숫자 선택하는 방식으로 작동
+  * 이미지를 줄이는 과정에서 중요하지 않은 정보는 제외하고 중요한 정보만 강조 (데이터 손실)
+* convolutional transpose
+  * convolution layer를 반대로 작동
+  * 입력 데이터를 확대 또는 고해상도로 재구성 -> 이미지 생성에 유리
+  * 출력 데이터와 필터 간의 내적을 계산하여 더 크기가 큰 입력 데이터를 재구성
+* convolutional transpose를 사용하는 이유
+  * 공간이 줄어들지 않아 해상도 유지에 효과적
+  * 정보가 감소하지 않으므로 연속적인 특징을 학습할 수 있음
+  * 공간적 차원을 확장하기 때문에 고해상도의 이미지 **생성**에 도움이 됨
+    * Discriminator 네트워크가 저해상도 입력 이미지로부터 고해상도 이미지로 이동하는 정보를 학습하기 좋음
   
 ### Remove fully-Connected Layers
 * 기존 GAN는 fully-connected layer 사용
