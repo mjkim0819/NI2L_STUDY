@@ -28,6 +28,9 @@ CNN과 GAN의 조합이 DCGAN에서 처음 등장한 것은 아니지만, 처음
 
 ### Max pooling to strided Convolution
 * 공간적 해상도 감소 문제를 해결하기 위해 pooling이 아닌 transpose(합성곱 전치) 방식으로 진행
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/e4950d33-cf6d-4cd5-b242-446a2dc9830e)  
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/24c77d17-77d0-4537-8cb0-8d15456c149d)  
+
 [![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/524a00da-05c8-427b-ab5e-b488f1f154a9)  ](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcc9YHv%2FbtqEdydGzb1%2FPTOGzXMKTYZyxQB5SsKZa0%2Fimg.gif)
 https://eehoeskrap.tistory.com/431
 
