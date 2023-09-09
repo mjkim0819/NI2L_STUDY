@@ -1,6 +1,6 @@
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/2bf6dbaa-c0ee-4714-9e8b-c0718110b1fc)
 
-# StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation [ICLR 2021]
+# StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation [CVPR 2018]
 **[논문](https://arxiv.org/pdf/1711.09020.pdf)**  
   
 ## Abstract
