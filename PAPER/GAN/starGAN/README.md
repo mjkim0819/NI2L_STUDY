@@ -1,4 +1,21 @@
+### GAN 유형
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/2bf6dbaa-c0ee-4714-9e8b-c0718110b1fc)
+
+#### Unconditional GAN (u-GAN)
+- 조건 없이(Unconditional) 데이터를 생성하는 모델
+- 생성자: 주어진 잠재 공간의 무작위한 포인트에서 데이터를 생성하려고 시도합니다.
+- 판별자: 생성된 데이터와 실제 데이터 간의 차이를 구별하는 역할을 합니다.
+
+#### Conditional GAN (c-GAN)
+- 조건적(Conditional)인 정보를 이용하여 데이터를 생성하는 모델
+- 생성자와 판별자에게 조건 정보(예: 클래스 레이블, 텍스트 설명)가 주어짐
+- 특정 클래스에 해당하는 이미지를 생성하는 작업
+
+#### Super-Resolution GAN (SRGAN)
+- 이미지 해상도를 개선한 데이터를 생성하는 모델
+- 저해상도 이미지를 고해상도 이미지로 변환하는 작업에 사용
+- 생성자 : 저해상도 입력 이미지를 받아 고해상도 이미지를 생성
+- 판별자 : 생성된 이미지의 질을 판단
 
 # StarGAN: Unified Generative Adversarial Networks for Multi-Domain Image-to-Image Translation [CVPR 2018]
 **[논문](https://arxiv.org/pdf/1711.09020.pdf)**  
