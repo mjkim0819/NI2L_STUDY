@@ -70,42 +70,41 @@
 ## StarGAN Networks
 ![figure 3](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/177c47d8-d7de-4400-94da-63e808293b62)
 - generator
-  - 
+  - 입력 이미지를 다른 도메인으로 변환하는 능력을 학습
+    - 특정 도메인(label)으로 변환하는 확률분포를 모델링
+    - 학습 과정에서 무작위로 선택한 도메인 라벨을 사용하여 입력 이미지를 유연하게 변환하도록 학습
+    - 다양한 도메인 간의 이미지 변환 수행
 - discriminator
+  - 입력 이미지의 도메인을 예측
+    - 입력 이미지가 원본 데이터일 확률 출력
+    - 이미지의 도메인을 예측하는 확률분포 출력
+
+### Multi-Domain Image to Image Translation
+- multi-domain task를 수행할 수 있게 해주는 loss 함수에 대해 설명
+- Adversarial Loss (적대적 손실)
+  - 목표 : 가짜 이미지를 실제 이미지 처럼 만들기 위해 generator를 학습하는데 사용
+  - 역할 : disciminator를 속이기 위해 생성된 이미지를 실제 이미지처럼 보이게 학습
+  - 결과 : 생성 이미지의 품질 향상
+- Domain Classification Loss (도메인 분류 손실)
+  - 목표 : generator가 특정 도메인으로 이미지를 변환하도록 유도
+  - 역할 : discriminator의 두번째 출력(domain 정보 출력)을 이용하여 generator의 출력 이미지가 원하는 도메인으로 분류되도록 학습하는데 사용
+  - 결과 : 원하는 도메인으로 이미지를 변환 (다양한 도메인 간 변환)
+- Reconstruction Loss (재구성 손실)
+  - 목표 : generator가 변환한 이미지를 다시 기존 domain으로 복원
+  - 역할 : 기존 이미지와 복원한 생성이미지의 차이 최소화
+  - 결과 : 변환 과정에서의 이미지 품질 유지, 안전성 개선
+--- 
+#### Adversarial Loss (적대적 손실)
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/8276091e-156e-475f-9103-32ebaee3c1d4)  
+* 학습 방법
+* 
+#### Domain Classification Loss (도메인 분류 손실)
+#### Reconstruction Loss (재구성 손실)
 
 
----
 
 
-## Result
+### Output
+- 첫 번째 출력 (Adversarial Output, 적대적 출력)
+- 두 번째 출력 (Domain Classification Output, 도메인 분류 출력)
 
-#### NOT MIMICKING TRAIN DATA
-**데이터를 기억하는지 학습하는지 확인**  
-* ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/3f6b8bac-eb42-4f88-abba-4c2ab531d74f)  
-  1 epoch  
-* ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/87888f00-26d5-4022-9e74-cfc4b459d2d5)  
-  5 epoch  
-* learning은 훈련 데이터들에 대한 파라미터 값이 최적이 되도록 일반화된 값을 찾는 것을 의미 (새로운 값에도 잘 작동)
-* memory는 이전의 값들에만 최적이 되고 새로운 값에는 맞지 않은 것
-* 사용한 SDG는 랜덤으로 초기화하기 때문에 첫 훈련부터 mapping을 할 수 없음
-* 아직 1, 5epoch로 under-fitting인 상황임에도 불구하고 높은 품질의 이미지가 생성
-
-#### WALKING IN THE LATENT SPACE
-**특정 지점에서 다른 지접으로 움직이는 데이터를 만들 때 자연스럽게 만들어지는지 확인**
-* ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/b5673b73-c210-43a8-a8af-5733f625e7ec)  
-* latent vector의 값을 조금씩 바꿔가면서 시점을 변화시켰을 때 부드렵게 변경됨
-* mapping이 아니라는 증거 (sample data와 mapping 되었다면 시점이 변했을 때 끊기고 부자연스러운 사진이 생성될 것)
-
-#### FORGETTING TO DRAW CERTAIN OBJECTS
-**filler를 이용하여 사진에서 원하는 부분 제거**
-* ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/a3d18870-f0b1-4997-a779-d3c04118f002)  
-* sample image에서 window를 찾아내 bounding box
-* window bounding box 안에서는 positive한 결과, 다른 랜덤 이미지에는 negative한 반응을 보이는 필터 찾기
-* 이미지에서 해당 filter을 dropout
-* 창문이 제거된 이미지 생성
-
-#### VECTOR ARITHMETIC ON FACE SAMPLES
-**vector arithmetic이 사용되고 있음을 확인**
-* ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/096e330e-7f04-4bce-84ad-039f3f53b64d)  
-* 이미지에서도 벡터 연산이 가능하다는 것을 확인
-* 이미지에서 인식된 특징을 카테고리화
