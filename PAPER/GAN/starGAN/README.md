@@ -147,4 +147,20 @@
   - CelebA label [0, 1, 0, 0, 1] : blond young
   - RaFD label [0, 0, 0, 0, 0] : 변화 관심 없음
   - mask vector [1, 0] : CelebA만 변화, RaFD는 변화 안함 (["celebA", "RaFD"])
-- 원하는 속성만 고려해서 이미지 생성 가능 
+- 원하는 속성만 고려해서 이미지 생성 가능
+
+## Results
+- CelebA
+  ![images_wilko97_post_9eb5eb0b-cca7-42c9-9183-2224abcc92f3_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/9c3a7c8e-12bd-4a61-a554-95d609616227)  
+  ![images_wilko97_post_482fe44b-9948-4c96-8620-ff5d5074f2ad_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7e0c08d1-9c6e-45c2-b6a0-8e66f3c2092a)  
+
+- RaFD
+  ![images_wilko97_post_0a9f94e4-35bf-4d16-8419-aae7538c478e_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/1f8951f2-4bcb-4fff-a757-3c0cd05bfed5)
+  ![images_wilko97_post_4865b074-fce9-4bbd-8be0-d292ddde4797_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/1e700312-efe8-4198-8880-8c7da24bfe0b)  
+
+- RaFD, RaFD + CelebA
+  ![images_wilko97_post_38b89542-ca79-4b31-aab0-b06ebf9a193a_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/63c3b6ea-a78f-43f5-8905-9fbae9a78d87)
+  
+- 다른 모델에 비해 StarGAN의 성능이 좋음
+- 사용한 parameter 개수도 적음
+- RaFD만 학습시킨 것 보다 CelebA를 함께 학습시킨 결과가 더 좋
