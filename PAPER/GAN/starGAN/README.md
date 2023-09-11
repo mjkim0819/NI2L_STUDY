@@ -66,10 +66,15 @@
     * 원 핫 벡터로 표현, 도메인 정보를 통해 입력 이미지를 원하는 출력 도메인으로 변환
 
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/8cfa4668-e961-467d-b8f6-0a43b7d60185)  
-      
----
 
-##
+## StarGAN Networks
+![figure 3](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/177c47d8-d7de-4400-94da-63e808293b62)
+- generator
+  - 
+- discriminator
+
+
+---
 
 
 ## Result
