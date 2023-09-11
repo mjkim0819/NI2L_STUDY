@@ -70,14 +70,20 @@
 ## StarGAN Networks
 ![figure 3](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/177c47d8-d7de-4400-94da-63e808293b62)
 - generator
-  - 입력 이미지를 다른 도메인으로 변환하는 능력을 학습
-    - 특정 도메인(label)으로 변환하는 확률분포를 모델링
-    - 학습 과정에서 무작위로 선택한 도메인 라벨을 사용하여 입력 이미지를 유연하게 변환하도록 학습
-    - 다양한 도메인 간의 이미지 변환 수행
+  - 입력
+    - 원본 이미지
+    - 타겟 도메인 레이블 : 변환하고자 하는 도메인을 나타내는 레이블 (랜덤으로 생성되면 다양한 방식으로 이미지 변환)
+  - 역할
+    - 입력 이미지를 다른 도메인으로 변환하는 능력을 학습
+      - 특정 도메인(label)로 변환하는 확률분포를 모델링
+    - 입력 이미지와 타겟 도메인 레이블을 고려하여 새로운 이미지 생성
 - discriminator
-  - 입력 이미지의 도메인을 예측
-    - 입력 이미지가 원본 데이터일 확률 출력
-    - 이미지의 도메인을 예측하는 확률분포 출력
+  - 입력
+    - 원본 이미지
+    - 생성된 이미지 : generator가 생성한 이미지
+  - 역할
+    - 입력 이미지가 원본 데이터일 확률 출력 (첫번째 output)
+    - 이미지의 도메인을 예측하는 확률분포 출력 (두번째 output)
 
 ### Multi-Domain Image to Image Translation
 - multi-domain task를 수행할 수 있게 해주는 loss 함수에 대해 설명
@@ -140,11 +146,5 @@
 - CelebA label:  [0, 1, 0, 0, 1] + RaFD label: [0, 0, 0, 0, 0] + mask vector: [1, 0]
   - CelebA label [0, 1, 0, 0, 1] : blond young
   - RaFD label [0, 0, 0, 0, 0] : 변화 관심 없음
-  - mask vector [1, 0] : CelebA만 변화, RaFD는 변화 안함
-- 원하는 속성만 고려해서 이미지 생성 가
-
-
-### Output
-- 첫 번째 출력 (Adversarial Output, 적대적 출력)
-- 두 번째 출력 (Domain Classification Output, 도메인 분류 출력)
-
+  - mask vector [1, 0] : CelebA만 변화, RaFD는 변화 안함 (["celebA", "RaFD"])
+- 원하는 속성만 고려해서 이미지 생성 가능 
