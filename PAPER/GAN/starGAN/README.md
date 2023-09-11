@@ -93,15 +93,55 @@
   - 목표 : generator가 변환한 이미지를 다시 기존 domain으로 복원
   - 역할 : 기존 이미지와 복원한 생성이미지의 차이 최소화
   - 결과 : 변환 과정에서의 이미지 품질 유지, 안전성 개선
---- 
+
 #### Adversarial Loss (적대적 손실)
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/8276091e-156e-475f-9103-32ebaee3c1d4)  
-* 학습 방법
-* 
+![images_wilko97_post_cf97ac89-9b15-40f4-b8e1-b953de93b00a_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/6eac5085-d2b0-43a8-9467-e74ae70a4bab)  
+* 진짜와 매우 비슷한 가짜 이미지를 생성하도록 유도
+  * 첫 번째 항 (Ex[log(Dsrc(x))])
+    * 실제 이미지가 진짜로 분류될 확률
+    * 값이 높을수록 discriminator가 실제 이미지를 잘 분류하고 있다는 것을 의미
+    * generator는 이 값을 낮추려고 노력하여 더 진짜같은 가짜 이미지 생성
+  * 두 번째 항 (Ex,c[log(1 - Dsrc(G(x,c)))])
+    * 가짜 이미지가 진짜로 분류될 확률
+    * 값이 높을수록 discriminator가 가짜 이미지를 진짜로 잘못 분류하고 있다는 것을 의미
+    * generator는 이 값을 높이기 위해 더 진짜같은 가짜 이미지를 생성
+
 #### Domain Classification Loss (도메인 분류 손실)
+![images_wilko97_post_927d9110-7402-48f7-a243-0b7dc2a04d12_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/e97a7874-cf8b-4646-88e8-1b1b1a1df5c5)  
+* 위는 진짜 이미지에 대한 도메인 분류
+* 아래는 가짜 이미지에 대한 도메인 분류
+* 모델이 이미지의 도메인을 인식할 수 있도록 유도
+   * [-log(Dcls(c' | x))]
+      * 입력 이미지 x를 도메인 c'로 정확하게 분류하는데 성공할수록 이 값은 작아짐
+      * x가 어떤 도메인에 속하는지 정확하게 분류하도록 학습
+  
 #### Reconstruction Loss (재구성 손실)
+![images_wilko97_post_b422d569-650f-4843-b0f2-0489993c2e1f_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/5ce96cc5-da4a-42f3-81a1-121fe4947868)   
+* 변환 과정에서 도메인 간의 일관성을 유지하도록 유도
+  * G(G(x,c),c')
+    * generator가 이미지를 변환하고 다시 원래 도메인으로 재구성한 결과 이미지
+  * ∥∥x - G(G(x,c),c')∥∥1
+    * 원본 이미지와 재구성한 이미지 간의 거리 계산
+    * 두 이미지 간의 차이 측정
 
+#### Full Objective
+![images_wilko97_post_275417a2-dd99-4db3-b6a4-883fc8ca65ca_image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/95d2de75-314f-44c6-af32-e1a7ae72267a)
 
+### Trainig with Multiple Datasets
+- 다른 label type을 가지는 여러 데이터셋을 동시에 사용가능
+- 그러나 데이터셋마다 가지고 있는 attribute의 정보가 달라 문제가 발생할 수 있음
+  - CelebA는 hair color, gender와 같은 외형 attribute
+  - RaFD는 happy, angry와 같은 감정 attribute
+#### Mask Vector
+- generator에게 어떤 속성을 변환할 것인지 제어할 때 사용
+- CelebA 속성: "black", "blond", "brown", "male", "young"
+- RaFD 속성: "angry", "fearful", "happy", "sad", "disgusted"
+- 목표 : blond young female(not male)
+- CelebA label:  [0, 1, 0, 0, 1] + RaFD label: [0, 0, 0, 0, 0] + mask vector: [1, 0]
+  - CelebA label [0, 1, 0, 0, 1] : blond young
+  - RaFD label [0, 0, 0, 0, 0] : 변화 관심 없음
+  - mask vector [1, 0] : CelebA만 변화, RaFD는 변화 안함
+- 원하는 속성만 고려해서 이미지 생성 가
 
 
 ### Output
