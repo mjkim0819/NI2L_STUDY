@@ -8,7 +8,7 @@
 - StyleGAN3
 
 ## PGGAN
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/587f6a83-6f16-416d-8ced-ecf322375069)
+[![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/587f6a83-6f16-416d-8ced-ecf322375069)](https://raw.githubusercontent.com/happy-jihye/happy-jihye.github.io/master/_posts/images/gan/pggan1.gif)
 - PGGAN, ProGAN, PGAN 등 다양한 이름으로 불리는 GAN
 - StyleGAN의 시초
 - 저해상도 사진에 layer를 추가하며 학습하여 고해상도의 사진을 생성하는 모델
