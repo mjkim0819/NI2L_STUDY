@@ -11,7 +11,6 @@
 - 이미지 생성에서 스타일과 특징의 독립적인 조절을 가능하게 하는 GAN
 - PGGAN 구조에서 Style transfer 개념을 적용하여 generator architetcture를 재구성 한 논문
 
-
 ## Entanglement, Disentanglement
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/a43a5978-d622-4310-bb76-38ccc29aea72)
 - (a) : 이상적인 latent space
@@ -23,10 +22,6 @@
   - W를 이용하여 각 특성의 변화를 linear하게 조절할 수 있게 됨
   - W(Linear Transformation)는 입력 벡터를 행렬과 벡터의 곱셈으로 변환하는 것을 의미
   - 표정, 머리 스타일, 머리카락 색상 등을 각각 다르게 제어
- 
-(b)는 PGGAN의 경우입니다. 데이터의 분포를 Gaussian으로 가정하기 때문에, Z space는 원래의 분포가 Gaussian에 맞춰 구부러져 모델링될 것입니다. 때문에 원래 분포보다 뒤틀림이 생기고, 보다 engtangle될 수 밖에 없습니다.
-
-(c)의 경우는 이러한 entanglement를 방지하고자, mapping network를 통해 imediate latent space로 한번 보내서 less entangle하게 만듭니다. latent space Z보다 less entangle한 imediate latent space W에서 이미지를 생성하게되어 style을 interpolation하는 과정에서 더 linear하게 동작할 수 있습니다.
 
 ## Style-based Generator
 - Generator에 latent vector z가 바로 입력되게 때문에 entangle하게 되어서 불가능 하다는 단점을 해
@@ -74,6 +69,21 @@
 - content 이미지 x에 style 이미지 y의 스타일을 입힐 때 사용하는 normalization
 - style transfer를 하는 경우 꼭 필요한 단계
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/974b9239-0697-47ca-b1ac-41ee2bf303fe)
+- 입력 이미지의 각 채널 또는 특성 맵의 스타일을 학습
+- 다른 이미지에 이 스타일을 적용
+- 이미지 스타일 전이나 변형을 가능하게 하며, 스타일과 콘텐츠를 분리하여 이미지 스타일을 변경하거나 특정 스타일로 이미지를 적용하는 데 사용
+- 구조
+  - Content 이미지 정규화
+    - 스타일을 적용하고자 하는 대상을 정규화
+  - Affine Transform
+    - 스타일 변형을 얻기 위해 Affine Transform(이동 및 확대/축소)를 수행
+  - Style Scaling Factor σ(y)와 Style Bias Factor μ(y)
+    - Affine Transform을 통해 스타일 이미지에서 스케일링 요소(σ)와 바이어스 요소(μ)를 추출
+    - 스타일의 크기와 이동을 나타내는 요소
+  - Scaling
+    - 스타일 이미지에서 얻은 스케일링 요소와 바이어스 요소를 적용하여 변형
+    - Content 이미지가 스타일 이미지의 스케일과 이동에 맞게 조절됩니다.
+- Content 이미지에 스타일을 적용하여 다른 스타일을 가진 Style 이미지를 생성할 수 있음
 
 ### Constant Input
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/e30b4e76-400f-4abd-97c5-1b3c49ab2a50)
@@ -91,31 +101,17 @@
 
 ## Properties of the style-based generator
 ### Style Mixing
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/b83ba643-6605-49ce-90a1-b0daacd777f7)
-- correlation되지 않게 style을 섞어주는 방법 (상호작용 없이 style 섞기)
+- 하나의 w로 학습을 하면 발생하는 correlation 문제를 해결하기 위해 style을 섞는 것
 - latent code 2개를 sampling (z1, z2)한 후, mapping network를 거쳐 2개의 style code(w1, w2)를 만드는 것
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/b83ba643-6605-49ce-90a1-b0daacd777f7)
+
+- single Latent z를 이용할 경우
+  - 동일한 latent vector z가 Mapping network f를 통해서 나온 W 하나만 계속 네트워크를 학습
+  - 데이터셋에서 우연하게 대머리인 사람들이 항상 선글라스를 끼는 경우
+    - 대머리 == 선글라스라는 correlation 발생
+- multi Latent z를 이용할 경우
+  - latent vertor z1, z2, z3 등이 Mapping network f를 통해서 w1, w2, w3 등을 생성
+  - 각 layer에 나눠서 적용
+  - 세밀한 부분들을 나누어서 학습 가능
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/1e9e96bd-a523-4145-8454-22261177cb38)
-- w_A로만 만든 source A와 w_b로만 만든 source B
-- 어느 resolution에서 cross over하여 style을 합성하는지에 따른 결과
-  - Coarse style : coarse resolution (4^2 -> 8^2)
-    - high level aspects (ex. pose, general hair style, face shape, eyeglasses) 전반적인, 큰 정보
-  - Middle style : middle resolution(16^2 -> 32^2)
-    - smaller scale facial features, hair style,eyes open/closed from B
-  - Fine style : fine resolution(64^2 -> 1024^2)
-    - hair color, 피부톤 같은 세밀한 정보 
-- fine resolution에서 cross over한다면, 전반적인 style은 source A를 따르고 머리색이나 세밀한 부분들같은 fine style는 source B를 담아 생성된 결과
-### Stochastic variation
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/d0a373b9-d745-4ff4-bc11-6f486f69db39)
-
-
-- content 이미지 정규화
-- style 이미지에 affine transform
-- style scaling factor σ(y)와 style bias factor μ(y)를 얻음
-- 정규화된 content이미지는 이에 맞춰 scaling되고 bias가 더해짐
-Adaptive Instance Normalization인만큼 Instance Normalization에서 style factor들이 적용된 것입니다. AdaIN역시 IN과 동일하게 instance(각 이미지), channel별로 normalize
-
-
-  
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/9718154e-4710-4a2e-96e0-d52108a30dd5)  
-
 
