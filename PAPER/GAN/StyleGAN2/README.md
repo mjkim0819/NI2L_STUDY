@@ -19,13 +19,24 @@
 - 추가적으로 이미지 질 개선을 위해 perceptual path length 개념을 regularization에 도입
 
 ## Common blob-like artifacts
-- 생성된 이미지에는 물방울 모양이 두드러지지 않지만, featuremap에서는 잘 확인됨
-- 거의 모든 이미지가 64x64 feature map부터 생성됨
-  - 데이터의 문제가 아닌 시스템 구조적 문제 ( 64x64 이전에는 찾아볼 수 없음 )
-- progressive growing 되면서 artifact가 점점 더 커짐
-- discriminator가 artifact를 감지하지만 없애지 않는 이유는 저자들도 찾지 못함
-- 원인은 **AdalN**의 구조적 문제 때문
+- 현상
+  1. 생성된 이미지에는 artifacts가 두드러지지 않지만, feature map에서는 잘 확인됨
+  2. 거의 모든 이미지가 64x64 feature map부터 생성됨
+  3. 물방울 모양이 없는 경우는 대부분 최종 이미지가 제대로 생성되지 않는 경우임
+  4. progressive growing 되면서 artifacts가 점점 더 커짐
+- 결과
+  - 데이터 상의 문제가 아닌 시스템의 구조적인 문제 (이미지가 잘못 생성되거나, 64x64 이전에는 찾아볼 수 없음)
+  - normalization 단계를 제거하면, artifacts가 완전히 사라짐
+  - discriminator가 artifact를 감지하지만 없애지 못하는 이유는 저자들도 찾지 못함
+  
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7853ced5-4afd-4910-94b3-41084d101482)  
+- 원인
+  - **AdalN**의 구조적 문제 때문
+    - feature map을 독립적으로 normalize
+    - 서로 연관되어 있는 feature map들의 관계가 무시
+- 새로운 instance normalization 방법이 필요
 
-### AdalN
-- GAN에서 스타일 전이 및 이미지 특징 정규화를 위한 기법
-- 평균(mean), 분산(variance)를 사용하여 
+### Generator architecture revisited
+
+
+
