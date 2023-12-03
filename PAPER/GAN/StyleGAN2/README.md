@@ -16,7 +16,11 @@
   - phase artifact
     - ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/1793af3b-6e20-41ec-b3bd-206bb15684e9)
     - glowing training 방식의 문제
-- 추가적으로 이미지 질 개선을 위해 perceptual path length 개념을 regularization에 도입
+### Key Insights
+- normalization의 변화
+  - actual statistics(실제 통계, ex.AdaIN) 방식에서 estimated statistics (추정 통계)로 수정
+- skip connection을 갖고 있는 계층 생성자 (hierarchical generator)를 사용
+- 이미지 질 개선을 위해 perceptual path length 개념을 regularization에 도입
 
 ## Common blob-like artifacts
 - 현상
@@ -32,10 +36,17 @@
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7853ced5-4afd-4910-94b3-41084d101482)  
 - 원인
   - **AdalN**의 구조적 문제 때문
-    - feature map을 독립적으로 normalize
-    - 서로 연관되어 있는 feature map들의 관계가 무시
+    1) 각 channel 별로 feature map마다 평균과 분산으로 normalization
+    2) statistics data를 input으로 normalization
+    - channel 별로 다른 값으로 scaling 되어서 합쳐지면서 범주에 벗어난 값 등장
+    - 값이 너무 작거나(검) 값이 너무 큰(흰) 부분 -> local한 부분으로 인한 spike 값
+    - 평균과 분산을 사용하기 때문에 각 feature map 사이의 관계를 알지 못함 (범주에 벗어난 값인지 알지 못함)
+    - 실제 통계를 기반으로 normalization하기 때문에 이상한 값도 그대로 반영
+   
+- 우연한 계기로 normalization을 제거하니 artifact가 사라짐 -> normalization과 artifact 사이의 관계 확인 
 - 새로운 instance normalization 방법이 필요
 
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/c8da9bb4-006b-4ccd-b03f-904909582331)  
 ### Generator architecture revisited
 
 
