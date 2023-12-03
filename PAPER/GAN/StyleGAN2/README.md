@@ -46,8 +46,28 @@
 - 우연한 계기로 normalization을 제거하니 artifact가 사라짐 -> normalization과 artifact 사이의 관계 확인 
 - 새로운 instance normalization 방법이 필요
 
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/c8da9bb4-006b-4ccd-b03f-904909582331)  
+
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/c8da9bb4-006b-4ccd-b03f-904909582331) 
+ 
 ### Generator architecture revisited
+
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/14d05519-1b36-4f12-8fd9-7dde6c2361e1)  
+- (b) : 기존 styleGAN
+  - mean, variance로 normalization
+  - AdaIN modulation으로 style을 입힘
+  - style block 안에 noise와 bias 존재
+- (c) : 초기의 새로운 styleGAN
+  - variance
+- (b) : 기존 styleGAN
+  - mean, variance로 normalization
+  - AdaIN modulation으로 style을 입힘
+  - style block 안에 noise와 bias 존재
+  - 이전 featuremap이 자신의 mean,variance로 normalization
+  - A에서는 w에서 learnable affine transform으로 scaling factor와 bias를 뽑아 normalize된 featuremap에 각각 곱해지고 더해져 (AdaIN modulation) style을 입힙
+  - Stochastic variation을 의한 Noise (B block)와 convolution의 bias는 style block안에서 더해지게 됨
+- (c) : 초기의 새로운 styleGAN
+  - eaturemap을 mean과 variance로 normalize하지 않고, variance로 나누기 (분산만 이용해도 충분)
+  - bias와 Noise는 style magnitue와 반비례하게 영향을 주기 때문에, bias와 Noise를 style block밖으로 빼버림
 
 
 
