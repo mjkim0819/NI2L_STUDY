@@ -110,23 +110,22 @@
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/13cce564-a96d-4d46-a493-c794c65d4f18)
 
 
-## Progressive growing revisited
+## Phase artifact
 - 현상
   1. Phase articacts 발생 ( 특히 눈동자나 치아에서 )
   2. 눈동자나 치아 모양은 잘 생성됨
   3. 자세를 바꾸거나 각도가 달라져도 위치가 고정되어 변하지 않는 문제 발생
-
-- 결과
-  - 데이터 상의 문제가 아닌 시스템의 구조적인 문제 (이미지가 잘못 생성되거나, 64x64 이전에는 찾아볼 수 없음)
-  - normalization 단계를 제거하면, artifacts가 완전히 사라짐
-  - discriminator가 artifact를 감지하지만 없애지 못하는 이유는 저자들도 찾지 못함
-  
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7853ced5-4afd-4910-94b3-41084d101482)  
 - 원인
   - **Progressive growing** 이라는 학습 방식의 문제 때문
     1) 저해상도에서 고해상도 이미지로 발전시켜서 훈련하는 방식
     2) progressive growing 구조는 각 resolution이 독립적
     3) 독립적이지만 점진적인 학습이 눈동자나 치아의 위치를 고정하려는 경향을 강하게 만듦 
     
-- 우연한 계기로 normalization을 제거하니 artifact가 사라짐 -> normalization과 artifact 사이의 관계 확인 
-- 새로운 instance normalization 방법이 필요
+### Progressive growing revisited
+- progressive growing 방식을 따르지 않고 high-quality 이미지를 생성할 수 있도록 styleGAN 변형
+- MSG-GAN의 전략을 응용
+  - network topology는 고정하고 various resolution의 훈련 데이터셋을 각 resolution layer에 넣어줌
+  - skip connection과 residual networks 실험
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/cd8ac4cf-80f1-4acb-8acd-a5864d0f19eb)  
+#### MSG-GAN(Multi-Scale Gradients GAN)
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/fd090563-9ae3-4e7d-85fc-936752bfe45f)
