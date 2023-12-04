@@ -158,5 +158,6 @@
   - PPL(Perceptual Path Length)
     ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7056fa98-d700-449d-9e7c-edd810d1ad07)
     - input과 output 사이 잠재 공간의 거리
-### styleGAN과 styleGAN2의 PPL 비교
+
+
 
