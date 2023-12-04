@@ -104,6 +104,7 @@
 #### 추가 및 결과  
 - feature map normalization과 weight normalization이 이론적으로 동일하려면 **통계적 가정** 필요
   - input이 i.i.d random variable이어야 함
+  - demodulate는 통계적 가정에 기반한 변환
 - 실제로 가정을 만족하긴 어렵지만 어느정도 간접적인 효과를 보임
 - artifact도 사라짐
 ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/a98e0016-0553-4c71-8e4e-8fe26e748b4c)  
@@ -122,10 +123,40 @@
     3) 독립적이지만 점진적인 학습이 눈동자나 치아의 위치를 고정하려는 경향을 강하게 만듦 
     
 ### Progressive growing revisited
-- progressive growing 방식을 따르지 않고 high-quality 이미지를 생성할 수 있도록 styleGAN 변형
-- MSG-GAN의 전략을 응용
-  - network topology는 고정하고 various resolution의 훈련 데이터셋을 각 resolution layer에 넣어줌
-  - skip connection과 residual networks 실험
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/cd8ac4cf-80f1-4acb-8acd-a5864d0f19eb)  
-#### MSG-GAN(Multi-Scale Gradients GAN)
-![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/fd090563-9ae3-4e7d-85fc-936752bfe45f)
+- PGGAN
+  - 각 resolution마다 완전히 학습하며 먼저 low-resolution features를 만들고 finer detail을 채우는 방식
+- progressive growing 방식을 따르지 않고 **feedforward 네트워크**를 활용해서 high-quality 이미지를 생성할 수 있도록 styleGAN 변형
+
+### Alternative network architectures
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/c6082b71-66d6-4a53-853c-a6c3ef58db55)
+- tRGB
+  - output tensor에서 channel의 크기를 3으로 바꿔서 사람이 확인할 수 있는 이미지 형태로 바꾸어주는 layer
+- fRGB
+  - 이미지 형태 3channel tensor로부터 입력을 받게 해주는 layer
+- MSG-GAN
+  - 동일한 resolution의 G와 D를 skip connection으로 matching
+- Input/output skips(skip connection)
+  - G의 output을 다 더 해서 D로 전달
+- Residual nets(residual connection)
+  - G와 D 내부에서만 각각 residual learning 사용
+  
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/cb2b2962-4875-455c-8e57-6a2a79f270ed)  
+- skip connection과 residual networks의 조합 실험
+  - generator에서 skip connection은 유용함
+  - discriminator에서 residual은 유용함
+  - progressive growing 없이 각각 skip generator, residual discriminator 사용
+  - phase artifact 개선 및 FID, PPL 성능 상승 
+
+## Image quality and generator smoothness
+- 이전에는 생성모델의 평가지표가 FID 또는 Precision, Recall이었음
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/68a69c4f-78dd-47f7-9228-0dba861b80fd)
+![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/9a6e0065-7866-4e60-823c-9281d23bcb3c)  
+- FID나 Precision, Recall이 같더라도 PPL이 낮으면 더 좋은 질의 이미지가 만들어짐
+  - FID : 생성된 영상의 집합과 실제 생성하고자 하는 클래스 데이터 분포의 사이의 거리
+  - Precision : 정밀도, 모델이 True라고 분류한 것 중 실제 True 비율
+  - Recall : 재현율, 실제 True인 것중 모델이 True라고 예측한 비율
+  - PPL(Perceptual Path Length)
+    ![image](https://github.com/mjkim0819/NI2L_STUDY/assets/108729047/7056fa98-d700-449d-9e7c-edd810d1ad07)
+    - input과 output 사이 잠재 공간의 거리
+### styleGAN과 styleGAN2의 PPL 비교
+
