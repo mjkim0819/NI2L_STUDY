@@ -1,0 +1,198 @@
+- 2page
+  - 이미지로 class를 구분하는 방법은 여러가지가 존재
+  - image recognition (이미지 인식)
+    - Single Object.
+    - 하나의 이미지를 하나의 class로 분류
+    - 주어진 이미지에 대해 여러 category의 확률을 구한 뒤, 가장 높은 범주를 바탕으로 class를 분류
+  - Object detection (객체 탐지)
+    - Multi Object.
+    - 이미지 속 여러 물체의 class를 분류
+    - 같은 category의 다른 물체도 분류 가능
+    - Bounding box를 이용하여 object의 위치도 표현 가능
+    - 위치는 알지만 정확한 물체의 크기/형태로 구분하지 못함
+  - Semantic segmentation (의미론적 분할)
+    - Single Object.
+    - 한 이미지에 여러 class를 가진 데이터가 등장해도 각각 분류 가능
+    - 물체와 배경을 구분하여 물체의 경계를 인식 가능
+    - 각 픽셀을 특정 class에 할당하여 분류하기 때문에 개별 객체는 식별하지 못함
+    - 붙어있는 같은 class는 같은 색으로 분류
+  - Instance segmentation (개별 물체의 분할)
+    - Multi Object.
+    - 이미지 속 여러 object를 pixel 단위로 분류
+    - 하나의 클래스에 속하는 여러 물체를 식별 가능
+    - 각 객체의 경계를 정확하게 식별 가능
+  - U-Net은 의료이미지를 구분하기 위해 등장한 모델
+- 3page
+  - 모델의 모양이 U자 형태로 줄어들었다가 커지는 모양을 닮았다고 U-Net
+  - U-Net은 크게 3가지로 구분할 수 있음
+  - Contracting Path (수축 경로)
+    - 입력 이미지로부터 feature를 추출하는 부분
+    - 단계가 지날 때마다 featuremap의 크기 감소, channel 수 증가
+    - featuremap의 크기는 줄어들지만 한 번에 더 많은 이미지 픽셀을 보며 의미정보(context information)을 추출
+  - Bottle Neck (전환 구간)
+    - 수축 경로에서 확장 경로로 전환되는 부분
+  - Expanding Path (확장 경로)
+    - 해상도를 다시 복구하면서 입력 이미지의 위치 정보(pixel 위치)를 복원
+    - upsampling 및 concatenation 연산을 통해 의미정보와 픽셀 위치 정보를 결합
+    - 결합하는 과정을 localization이라고 하는데, 그 덕에 각 픽셀이 속하는 카테고리를 구분하는 정확도가 높아짐
+    - 각 단계에서 featuremap의 크기를 줄이고 채널 수를 증가시킴
+  - U-Net의 핵심 아이디어
+    - 이미지 인식에 patch 탐색 방식을 차용
+      - 속도 향상
+    - contracting path와 expanding path 사이 skip connection을 추가하여 trade-off 문제 해결
+      - 정확도 향상
+- 4page
+  - trade-off 문제에 대한 설명
+    - context(의미정보 : 이웃 pixel들이 가지고 있는 패턴 특징 -> class 분류에 필요한 정보)
+    - localization(pixel의 위치)
+    - 둘은 서로 trade-off 관계를 가짐
+  - patch는 원본 입력 이미지를 자르거나 늘려서 모델에 처음 넣었을 때의 크기라고 생각
+  - patch의 크기가 클 때
+    - 입력 이미지가 크니까 더 많은 pixel 확인 가능
+    - 한번에 context를 파악하기 쉬움
+    - 모델이 깊어지면서 max-pooling이 많아짐
+    - 크기가 점점 줄어들면서 pixel의 위치가 정확하지 않음
+    - localization 성능(원본에서 pixel의 위치)이 저하
+  - patch의 크기가 작을 때
+    - 모델이 깊지 않으므로 픽셀의 위치 정보는 파악하기 쉬움
+    - 이미지가 작기 때문에 어떤 특징과 패턴을 가지고 있는지 확인하기 어려움
+    - 눈동자만 보고 강아지인지 여우인지 확인하기 어려움 ( 예시 )
+  - 해결방법
+   - 뒤에서 설명할거라 간단하게만 언급
+   - 수축하는 부분과 확장하는 부분 사이사이를 skip connection으로 연결
+   - 따라서 작은 patch size에서도 context에 대한 정보를 포함할 수 있음
+   - trade-off 보완
+- 5page
+  - 아까 U-Net의 핵심 아이디어로 patch 탐색 방식을 차용했다고 언급
+  - 이전에는 sliding window라는 방식을 사용
+  - window를 저 빨간 네모 하나라고 생각
+  - Sliding window란 window가 일정한 간격으로 ~
+  - U-Net은 그와 다르게 이미 검증된 ~
+  - 애니메이션 진행
+  - Sliding window는 일정한 간격으로 밀면서 원하는 object를 찾으므로 window가 이동하므로 겹치는 부분이 발생함
+  - U-Net은 겹치는 부분은 제외하고 다음 patch를 검증하기 때문에 속도가 빠름
+- 6page
+  - U-Net은 FCN에서 발전한 네트워크로 FCN의 일부라고 생각하면 됨
+  - 해당 그림은 일반적인 FCN의 그림
+  - FCN?
+    - 이미지를 픽셀 단위로 분류하기 위해서 설계된 deep learning architecture
+  - up-sampling, skip connection이 있다는 점에서 비슷
+    - up-sampling ( deconvolution 부분이 U-Net의 up-sampling )
+      - 점점 이미지의 해상도가 커지면서 원 이미지 크기로 복원
+    - skip connection ( +가 그려진 선으로 연결된 부분 )
+      - 수축하는 부분과 확장하는 부분이 연결되어 정보 복원에 유리
+      - 경계 정보 복원이라고 되어 있는 이유는 패턴이 학습이 잘 안되면 경계가 뚜렷하지 않고 흐려지는 부분이 많기 때문
+      - 패턴 학습이 잘 될 수록 경계가 뚜렷하게 구분됨 ( 사진 )
+      - 결과 속 숫자는 stride 숫자고 stride가 작을수록 더 경계가 뚜렷해짐 (겹치는 부분이 많기 때문)
+  - 차이점
+    - deconvolution부분에 U-Net은 3x3 convolution과 ReLU 과정이 추가됨
+    - 더 전문화 된 학습 방법
+      - 뒤에서 언급
+- 7page
+  - AutoEncoder
+    - 앞 조에서 발표한 초기 Encoder 신경망과 비교
+    - AutoEncoder는 ~
+  - 기존 신경망은 한계를 가지고 있음
+    - 기존에는 차원이 압축되면서 저차원으로 변함
+    - 저차원은 이미지의 위치 정보를 손실함
+    - 따라서 다시 고차원으로 확장한다고 해도 손실된 위치 정보를 회복하는데 어려움이 있음
+  - U-Net
+    - 계속 언급했듯이 skip connection을 이용하여 해결
+      - 인코딩 단계와 디코딩 단계를 각 레이어끼리 연결하여 합침
+      - 인코딩 레이어에서 얻은 특징을 디코딩 레이어에서 가져올 수 있음
+      - 고차원으로 다시 확장하는 과정에서 손실된 위치 정보를 다시 회복함
+    - 이미지의 특징을 추출함과 동시에 정확한 위치도 파악할 수 있음 
+- 8page
+  - U-Net의 구조를 더 정확하게 설명
+  - Contracting Path
+  - convolution 3x3
+    - 처음 이미지가 들어오면 각 contracting step 마다 3x3 convolution 수행
+    - ReLU도 포함됨
+    - 두번씩 반복
+      - padding을 하지 않고도 feature map의 크기를 줄일 수 있음
+  - max pool
+    - 각 단계마다 2x2 max-pooling 연산 수행
+    - feature map의 크기가 절반으로 감소
+  - channel 수가 2배로 증가
+- 9page
+  - Expanding Path
+  - upsampling
+    - 채널 수가 절반으로 감소
+    - 그러나 512 512 똑같은 것처럼 확인 가능
+    - upsampling만하면 256으로 줄어드는데 이전 contracting path의 256이 합쳐져서 512가 됨
+  - 빨간색
+    - 각 단계마다 2x2 up-convolution 연산 수행
+    - feature map의 크기가 2배로 증가
+  - 초록색
+    - expanding step 마다 3x3 convolution이 두차례 반복
+      - FCN과의 차이
+    - padding 없이 진행
+  - 검정색
+    - 마지막 부분에 비선형 예측을 위해 1x1 conV 연산 추가
+  - Convolution 연산과정에서 패딩을 사용하지 않음
+    - 모델의 Output Size는 Input Size보다 작음
+    - 예를들어 572×572×(RGB) 크기의 이미지를 Input으로 사용하면 Output으로 388×388×(Class) 이미지가 생성 
+- 10page
+  - BottleNeck
+    - ~전환되는 구간
+    - 네트워크의 이미지 특징을 파악할 수 있도록 돕는 역할
+    - convolution layer로 구성
+  - Skip connection
+    - bottle neck에서 생기는 data loss를 최소화 시키기 위해 존
+    - 아까 합쳐진다고 했던 부분
+    - convolution 연산으로 줄어든 size만큼 featuremap을 crop해서 연결
+    - down sampling 중 손실되는 공간 정보를 복구
+- 11page
+  - U-Net의 핵심 아이디어였던 진화된 학습 방법들에 대한 설명
+  - 입력 이미지를 변형시켜 모델의 성능 향상
+    - 이 두가지는 서로 연결된 것
+    - 입력 이미지보다 출력 이미지가 작다는 것을 이용해서 입력 이미지를 변형시킴
+    - 둘을 함께 이용하면 결과론적으로 입력 이미지와 출력이미지의 크기는 같음
+  - Overlap-tile
+    - 우선 정확히 따지면 입력 이미지보다 출력 이미지가 작은게 아니라
+    - 입력 patch의 사이즈보다 출력 patch의 사이즈가 작은 것
+    - 빅 사이즈의 이미지를 겹치는 부분이 있도록 일정 크기의 patch로 나눠 모델의 input으로 활용하는 것.
+      - 파란색이 처음 입력 patch
+      - 노란색이 처음 출력 patch
+      - 빨간색이 두번째 입력 patch
+      - 파란색이 두번째 출력 patch
+    - 출력은 겹치지 않지만 입력은 겹치므로 context 파악 가능
+  - Mirror
+    - 이미지의 경계 부분을 거울이 반사된 ~
+      - 원본 이미지를 더 크게 만드는 방법
+      - 거울처럼 반사하여 복사하는 것
+    - Overlap-tile과 합치면
+      - 실제 입력크기보다 크게 입력 이미지를 만들고 실제 입력크기의 출력을 얻을 수 있
+- 12page
+  - Weight loss
+    - 모델이 객체간 경계를 구분할 수 있도록 weight loss를 구성하고 학습
+    - 아래 그림처럼 이미지 내 세포들간의 경계 구분을 명확하게 하기 위해
+    - 가중치를 조절하면서 훈련하는 방식
+  - loss function은 cross entropy 사용
+    - 아래 그대로 읽기
+    - 왼쪽은 loss function 식인데 loss는 weightmap 곱하기 픽셀에서 얻은 class 별 예측값을 softmax한 것을 log로 취한 값
+  - 파라미터는 다음과 같다 참고하면 될 듯
+- 13page
+  - 데이터 증강은 ~이다
+    - 아래 사진처럼 원본 사진을 조금씩 변화를 주어 데이터 양을 늘린다
+    - 데이터를 회전하거나 비틀거나 색 변화를 주어 이미지를 생성한다
+  - 장점
+    - 다양한 ~
+      - 데이터의 양이 많아지기 때문에 성능 향상
+    - 원본 ~
+      - 이상한 데이터가 아니라 원본 데이터를 바탕으로 하기 때문에 성능이 더 낮아지지 않는다
+      - 오히려 성능 향상
+    - 데이터 변형 ~
+  - Elastic deformation
+    - 논문에서 추가로 소개된 데이터 증강 방법
+    - 단순히 한 방향으로 비틀거나 조금 회전이 아니라
+    - 곡선 형태로 비틀거나 변화를 주는 방식
+    - 원본 이미지를 조금 더 복잡하게 변형하기 때문에
+    - 현실의 변형이나 변화(그대로 된 이미지가 아니라 다른 이미지를 사용할 때)에 대해 더 잘 일반화 
+- 14page
+  - 전자현미경 이미지 분할 챌린지에서의 지표와 ISBI 세포추적 챌린지에서의 지표 분석
+  - IOU란 ~ 지표
+  - 쭉 읽
+- 15page
+- 16page
+- 17page 
