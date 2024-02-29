@@ -1,7 +1,7 @@
 - 2page
   - 이미지로 class를 구분하는 방법은 여러가지가 존재
   - image recognition (이미지 인식)
-    - Single Object.
+    - Single Object 아님 ( object 탐지 불가 )
     - 하나의 이미지를 하나의 class로 분류
     - 주어진 이미지에 대해 여러 category의 확률을 구한 뒤, 가장 높은 범주를 바탕으로 class를 분류
   - Object detection (객체 탐지)
@@ -11,10 +11,11 @@
     - Bounding box를 이용하여 object의 위치도 표현 가능
     - 위치는 알지만 정확한 물체의 크기/형태로 구분하지 못함
   - Semantic segmentation (의미론적 분할)
-    - Single Object.
+    - Single Object (아님 object 탐지 불가 )
+    - 물체를 탐지하는게 아니라 그냥 pixel 단위로 이미지를 분할하고 분류하는 것 뿐
     - 한 이미지에 여러 class를 가진 데이터가 등장해도 각각 분류 가능
-    - 물체와 배경을 구분하여 물체의 경계를 인식 가능
     - 각 픽셀을 특정 class에 할당하여 분류하기 때문에 개별 객체는 식별하지 못함
+    - 물체와 배경을 구분하여 물체의 경계를 인식 가능
     - 붙어있는 같은 class는 같은 색으로 분류
   - Instance segmentation (개별 물체의 분할)
     - Multi Object.
